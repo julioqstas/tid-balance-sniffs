@@ -5,7 +5,7 @@ import * as XLSX from 'xlsx';
 import { AppShell, DockTab } from './components/AppShell';
 import {
   FilaProduccion, LoteAgrupado, ViewProps,
-  ConsumoView, ProduccionView, RendimientosView, SalidasView, SaldosView,
+  ConsumoView, ProduccionView, RendimientosView, SalidasView, SaldosView, InicioView,
 } from './components/Views';
 
 // ── Helpers ───────────────────────────────────────────────
@@ -28,7 +28,7 @@ export default function SniffsDashboard() {
   const [filtrosLote, setFiltrosLote] = useState<string[]>([]);
   const [filtrosEspecie, setFiltrosEspecie] = useState<string[]>([]);
   const [filtrosLinea, setFiltrosLinea] = useState<string[]>([]);
-  const [activeTab, setActiveTab] = useState<DockTab>('consumos');
+  const [activeTab, setActiveTab] = useState<DockTab>('inicio');
   const [periodoLabel, setPeriodoLabel] = useState('');
   const [unitMode, setUnitMode] = useState<'m3' | 'pt'>('m3');
   const importRef = useRef<HTMLInputElement>(null as unknown as HTMLInputElement);
@@ -205,6 +205,12 @@ export default function SniffsDashboard() {
       unitMode={unitMode}
       onUnitModeChange={setUnitMode}
     >
+      {activeTab === 'inicio' && <InicioView
+        {...viewProps}
+        onTabChange={setActiveTab}
+        onImport={() => importRef.current?.click()}
+        periodoLabel={periodoLabel}
+      />}
       {activeTab === 'consumos' && <ConsumoView     {...viewProps} />}
       {activeTab === 'produccion' && <ProduccionView   {...viewProps} />}
       {activeTab === 'rendimientos' && <RendimientosView {...viewProps} />}

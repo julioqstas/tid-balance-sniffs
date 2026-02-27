@@ -2,7 +2,7 @@
 
 import React, { useState, useMemo } from 'react';
 import { BarChart, Bar, LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, Cell } from 'recharts';
-import { TreePine, BarChart2, TrendingUp, ArrowUpFromLine, Archive, FileSpreadsheet, AlertTriangle, CheckCircle2, Clock, Layers, ChevronUp, ChevronDown, ChevronsUpDown } from 'lucide-react';
+import { TreePine, BarChart2, TrendingUp, ArrowUpFromLine, Archive, FileSpreadsheet, AlertTriangle, CheckCircle2, Clock, Layers, ChevronUp, ChevronDown, ChevronsUpDown, UploadCloud } from 'lucide-react';
 
 // ── Types ──────────────────────────────────────────────────
 export interface FilaProduccion {
@@ -475,6 +475,238 @@ export function SaldosView(props: ViewProps) {
                     </table>
                 </div>
             </TableCard>
+        </div>
+    );
+}
+
+// ── INICIO VIEW ────────────────────────────────────────────
+import type { DockTab } from './AppShell';
+
+interface InicioViewProps extends ViewProps {
+    onTabChange: (tab: DockTab) => void;
+    onImport: () => void;
+    periodoLabel?: string;
+}
+
+const fvShort = (v: number) =>
+    v >= 1000
+        ? new Intl.NumberFormat('en-US', { minimumFractionDigits: 1, maximumFractionDigits: 1 }).format(v)
+        : new Intl.NumberFormat('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }).format(v);
+
+export function InicioView({ datos, agrupados, hasData, unitMode, onTabChange, onImport, periodoLabel }: InicioViewProps) {
+    const u = makeUnit(unitMode);
+
+    // ── KPIs calculados ─────────────────────────────────────
+    const totalConsumo = agrupados.reduce((s, l) => s + l.consumoTotalM3, 0);
+    const totalProd = agrupados.reduce((s, l) => s + l.produccionTotalM3, 0);
+    const totalLP = agrupados.reduce((s, l) => s + l.produccionLP, 0);
+    const totalLRE = agrupados.reduce((s, l) => s + l.produccionLRE, 0);
+    const totalSalidas = agrupados.reduce((s, l) => s + l.salidasTotal, 0);
+    const totalStock = agrupados.filter(l => l.saldoTotal > 0).reduce((s, l) => s + l.saldoTotal, 0);
+    const rendProm = agrupados.length ? agrupados.reduce((s, l) => s + l.rendimientoGlobal, 0) / agrupados.length : 0;
+    const deficits = agrupados.filter(l => l.estadoLote === 'deficit').length;
+    const cerrados = agrupados.filter(l => l.estadoLote === 'cerrado').length;
+    const enProceso = agrupados.filter(l => l.estadoLote === 'en_proceso').length;
+    const especiesUnicas = new Set(datos.map(d => d.especie)).size;
+    const pctDespachado = totalProd > 0 ? (totalSalidas / totalProd) * 100 : 0;
+
+    // ── Estado sin datos — bienvenida ───────────────────────
+    if (!hasData) {
+        return (
+            <div className="flex flex-col items-center justify-center h-full text-center px-6 py-12 animate-fade-in">
+                <p className="text-[11px] font-bold uppercase tracking-widest mb-3" style={{ color: 'var(--color-brand)' }}>
+                    TID · Auditor SNIFFS Balance CTP
+                </p>
+                <h1 className="text-[26px] md:text-[32px] font-extrabold leading-tight" style={{ color: 'var(--color-timber-dark)' }}>
+                    ¡Bienvenido al Balance
+                </h1>
+                <h1 className="text-[26px] md:text-[32px] font-extrabold leading-tight mb-3" style={{ color: 'var(--color-brand)' }}>
+                    de Transformación Primaria!
+                </h1>
+                <p className="text-[14px] font-medium max-w-xs mb-10" style={{ color: 'var(--color-timber-grey)' }}>
+                    ¿Qué balance te gustaría analizar hoy?
+                </p>
+
+                {/* Botón latiente */}
+                <div className="relative flex items-center justify-center mb-6" style={{ width: 80, height: 80 }}>
+                    <span className="absolute inset-0 rounded-full" style={{
+                        background: '#057b57',
+                        animation: 'pulse-ring 1.8s cubic-bezier(0.215,0.61,0.355,1) infinite',
+                        opacity: 0.4,
+                    }} />
+                    <button
+                        onClick={onImport}
+                        className="relative z-10 flex flex-col items-center justify-center rounded-full text-white cursor-pointer border-none w-full h-full"
+                        style={{
+                            background: 'var(--color-brand)',
+                            boxShadow: 'var(--shadow-fab)',
+                            animation: 'pulse-scale 2.4s ease-in-out infinite',
+                        }}
+                        aria-label="Importar Excel"
+                    >
+                        <UploadCloud size={28} />
+                    </button>
+                </div>
+
+                <p className="text-[13px] font-semibold mb-1" style={{ color: 'var(--color-timber-dark)' }}>
+                    Importar Cuadro Resumen 3
+                </p>
+                <p className="text-[12px]" style={{ color: 'var(--color-timber-grey)' }}>
+                    Archivo <strong>.xlsx</strong> exportado del sistema SNIFFS
+                </p>
+
+                {/* Mini módulos preview */}
+                <div className="mt-10 grid grid-cols-3 md:grid-cols-5 gap-3 w-full max-w-sm">
+                    {[
+                        { icon: <TreePine size={16} />, label: 'Consumos', color: '#057b57' },
+                        { icon: <BarChart2 size={16} />, label: 'Producción', color: '#4f46e5' },
+                        { icon: <TrendingUp size={16} />, label: 'Rendimiento', color: '#d97706' },
+                        { icon: <ArrowUpFromLine size={16} />, label: 'Salidas', color: '#0891b2' },
+                        { icon: <Archive size={16} />, label: 'Stock', color: '#7c3aed' },
+                    ].map(m => (
+                        <div key={m.label} className="flex flex-col items-center gap-1.5 p-3 rounded-2xl bg-white"
+                            style={{ boxShadow: 'var(--shadow-card)', opacity: 0.5 }}>
+                            <span style={{ color: m.color }}>{m.icon}</span>
+                            <span className="text-[10px] font-bold" style={{ color: 'var(--color-timber-grey)' }}>{m.label}</span>
+                        </div>
+                    ))}
+                </div>
+            </div>
+        );
+    }
+
+    // ── Estado con datos — dashboard KPIs ───────────────────
+    const modules: {
+        tab: DockTab; icon: React.ReactNode; label: string; iconBg: string;
+        kpi1: string; kpi1sub: string; kpi2: string; kpi2sub: string; kpi2color?: string;
+    }[] = [
+            {
+                tab: 'consumos', label: 'Consumos', iconBg: '#057b57',
+                icon: <TreePine size={22} className="text-white" />,
+                kpi1: `${fvShort(totalConsumo)} m³`, kpi1sub: 'Total consumido',
+                kpi2: `${agrupados.length}`, kpi2sub: 'lotes procesados',
+            },
+            {
+                tab: 'produccion', label: 'Producción', iconBg: '#4f46e5',
+                icon: <BarChart2 size={22} className="text-white" />,
+                kpi1: `${u.fmt(totalProd)} ${u.label}`, kpi1sub: 'Producción total',
+                kpi2: `${fvShort(totalProd > 0 ? totalLP / totalProd * 100 : 0)}% LP`,
+                kpi2sub: `${fvShort(totalProd > 0 ? totalLRE / totalProd * 100 : 0)}% LRE`,
+            },
+            {
+                tab: 'rendimientos', label: 'Rendimiento', iconBg: '#d97706',
+                icon: <TrendingUp size={22} className="text-white" />,
+                kpi1: fp(rendProm), kpi1sub: 'Rendimiento prom.',
+                kpi2: `${especiesUnicas}`, kpi2sub: 'especies distintas',
+            },
+            {
+                tab: 'salidas', label: 'Salidas', iconBg: '#0891b2',
+                icon: <ArrowUpFromLine size={22} className="text-white" />,
+                kpi1: `${u.fmt(totalSalidas)} ${u.label}`, kpi1sub: 'Total despachado',
+                kpi2: fp(pctDespachado), kpi2sub: '% sobre producción',
+                kpi2color: pctDespachado >= 70 ? '#16a34a' : pctDespachado >= 40 ? '#d97706' : '#dc2626',
+            },
+            {
+                tab: 'saldos', label: 'Stock', iconBg: '#7c3aed',
+                icon: <Archive size={22} className="text-white" />,
+                kpi1: `${u.fmt(totalStock)} ${u.label}`, kpi1sub: 'En proceso',
+                kpi2: deficits > 0
+                    ? `${deficits} déficit${deficits > 1 ? 's' : ''}`
+                    : `${cerrados} cerrado${cerrados !== 1 ? 's' : ''}`,
+                kpi2sub: deficits > 0 ? 'a revisar urgente' : `${enProceso} en proceso`,
+                kpi2color: deficits > 0 ? '#dc2626' : '#16a34a',
+            },
+        ];
+
+    return (
+        <div className="p-4 md:p-6 space-y-5 animate-fade-in">
+            {/* Header */}
+            <div className="flex flex-col sm:flex-row sm:items-center gap-3">
+                <div className="flex-1">
+                    <h2 className="text-[20px] font-extrabold" style={{ color: 'var(--color-timber-dark)' }}>
+                        Resumen ejecutivo
+                    </h2>
+                    <p className="text-[12px] font-medium" style={{ color: 'var(--color-timber-grey)' }}>
+                        {agrupados.length} lotes · {especiesUnicas} especies analizadas
+                    </p>
+                </div>
+                {periodoLabel && (
+                    <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-full border text-[11px] font-semibold self-start"
+                        style={{ borderColor: 'var(--color-brand)', color: 'var(--color-brand)', background: 'white' }}>
+                        📅 {periodoLabel}
+                    </div>
+                )}
+            </div>
+
+            {/* Alerta de déficit */}
+            {deficits > 0 && (
+                <button
+                    onClick={() => onTabChange('saldos')}
+                    className="w-full flex items-center gap-3 p-3.5 rounded-2xl border border-red-200 text-left cursor-pointer transition-all hover:shadow-md bg-transparent"
+                    style={{ background: '#fff5f5' }}
+                >
+                    <AlertTriangle size={18} className="text-red-600 shrink-0" />
+                    <div className="flex-1 min-w-0">
+                        <p className="text-[13px] font-bold text-red-700">
+                            ⚠️ {deficits} lote{deficits > 1 ? 's' : ''} con déficit detectado{deficits > 1 ? 's' : ''}
+                        </p>
+                        <p className="text-[11px] text-red-500">
+                            Saldo negativo: inconsistencia entre producción y despachos · Ver Saldos →
+                        </p>
+                    </div>
+                </button>
+            )}
+
+            {/* Tarjetas de módulo */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-5 gap-4">
+                {modules.map(m => (
+                    <button
+                        key={m.tab}
+                        onClick={() => onTabChange(m.tab)}
+                        className="group bg-white rounded-2xl p-4 text-left flex flex-col gap-3 cursor-pointer border-none transition-all hover:-translate-y-0.5 w-full"
+                        style={{ boxShadow: 'var(--shadow-card)' }}
+                        onMouseEnter={e => (e.currentTarget.style.boxShadow = 'var(--shadow-card-hover)')}
+                        onMouseLeave={e => (e.currentTarget.style.boxShadow = 'var(--shadow-card)')}
+                    >
+                        {/* Cabecera */}
+                        <div className="flex items-center justify-between">
+                            <div className="w-10 h-10 rounded-xl flex items-center justify-center shrink-0"
+                                style={{ background: m.iconBg }}>
+                                {m.icon}
+                            </div>
+                            <span className="text-[10px] font-bold opacity-0 group-hover:opacity-100 transition-opacity"
+                                style={{ color: m.iconBg }}>
+                                Ver →
+                            </span>
+                        </div>
+                        {/* Etiqueta módulo */}
+                        <p className="text-[10.5px] font-bold uppercase tracking-wider" style={{ color: 'var(--color-timber-grey)' }}>
+                            {m.label}
+                        </p>
+                        {/* KPI principal */}
+                        <div>
+                            <p className="text-[19px] font-extrabold leading-tight tabular-nums" style={{ color: 'var(--color-timber-dark)' }}>
+                                {m.kpi1}
+                            </p>
+                            <p className="text-[10.5px] font-medium" style={{ color: 'var(--color-timber-grey)' }}>{m.kpi1sub}</p>
+                        </div>
+                        {/* Divisor */}
+                        <div className="h-px w-full bg-gray-100" />
+                        {/* KPI secundario */}
+                        <div>
+                            <p className="text-[15px] font-extrabold tabular-nums leading-tight"
+                                style={{ color: m.kpi2color ?? m.iconBg }}>
+                                {m.kpi2}
+                            </p>
+                            <p className="text-[10.5px] font-medium" style={{ color: 'var(--color-timber-grey)' }}>{m.kpi2sub}</p>
+                        </div>
+                    </button>
+                ))}
+            </div>
+
+            <p className="text-[10px] font-bold uppercase tracking-widest text-center pt-1" style={{ color: '#cbd5e1' }}>
+                Toca cualquier tarjeta para ver el análisis detallado
+            </p>
         </div>
     );
 }

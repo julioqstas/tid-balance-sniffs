@@ -3,11 +3,11 @@
 import { ReactNode, useState } from 'react';
 import {
     UploadCloud, TreePine, BarChart2, TrendingUp, ArrowUpFromLine,
-    Archive, Filter, ChevronDown, Check, X, RefreshCcw, SlidersHorizontal
+    Archive, Filter, ChevronDown, Check, X, RefreshCcw, SlidersHorizontal, Home
 } from 'lucide-react';
 
 // ── Types ──────────────────────────────────────────────────
-export type DockTab = 'consumos' | 'produccion' | 'rendimientos' | 'salidas' | 'saldos';
+export type DockTab = 'inicio' | 'consumos' | 'produccion' | 'rendimientos' | 'salidas' | 'saldos';
 
 export interface FilterState {
     filtrosAnio: string[]; setFiltrosAnio: (v: string[]) => void;
@@ -32,6 +32,7 @@ interface AppShellProps {
 }
 
 const TABS: { id: DockTab; label: string; icon: ReactNode }[] = [
+    { id: 'inicio', label: 'Inicio', icon: <Home size={22} /> },
     { id: 'consumos', label: 'Consumos', icon: <TreePine size={22} /> },
     { id: 'produccion', label: 'Producción', icon: <BarChart2 size={22} /> },
     { id: 'rendimientos', label: 'Rendimiento', icon: <TrendingUp size={22} /> },
@@ -40,6 +41,7 @@ const TABS: { id: DockTab; label: string; icon: ReactNode }[] = [
 ];
 
 const TITLES: Record<DockTab, { title: string; sub: string }> = {
+    inicio: { title: 'Inicio', sub: 'Resumen ejecutivo del balance SNIFFS' },
     consumos: { title: 'Consumos', sub: 'Madera en trozas ingresada al proceso' },
     produccion: { title: 'Producción por Línea', sub: 'LP · LRE por lote de corte' },
     rendimientos: { title: 'Rendimientos', sub: 'Eficiencia de conversión por lote' },
@@ -134,7 +136,7 @@ function SheetSelect({ titulo, opciones, seleccionados, setSeleccionados }: {
 // ── AppShell ───────────────────────────────────────────────
 export function AppShell({ children, activeTab, onTabChange, onImport, importRef, hasData, periodoLabel, filters, unitMode, onUnitModeChange }: AppShellProps) {
     const [sheetOpen, setSheetOpen] = useState(false);
-    const showUnitToggle = ['produccion', 'salidas', 'saldos'].includes(activeTab);
+    const showUnitToggle = ['inicio', 'produccion', 'salidas', 'saldos'].includes(activeTab);
 
     const { filtrosAnio, filtrosLote, filtrosEspecie, filtrosLinea } = filters;
     const totalFiltros = filtrosAnio.length + filtrosLote.length + filtrosEspecie.length + filtrosLinea.length;
@@ -322,15 +324,15 @@ export function AppShell({ children, activeTab, onTabChange, onImport, importRef
                 {/* Bottom dock mobile */}
                 <div className="md:hidden bg-white/95 backdrop-blur-md border-t border-gray-200 px-1 pt-1.5 flex items-end justify-around shrink-0"
                     style={{ boxShadow: 'var(--shadow-dock)', paddingBottom: 'max(8px, env(safe-area-inset-bottom))' }}>
-                    {TABS.slice(0, 2).map(tab => {
+                    {TABS.slice(0, 3).map(tab => {
                         const active = activeTab === tab.id;
                         return (
                             <button key={tab.id} onClick={() => onTabChange(tab.id)}
-                                className="flex flex-col items-center gap-0.5 py-1 px-2 rounded-xl min-w-[52px] border-none cursor-pointer transition-all bg-transparent"
+                                className="flex flex-col items-center gap-0.5 py-1 px-1 rounded-xl min-w-[44px] border-none cursor-pointer transition-all bg-transparent"
                                 style={{ color: active ? 'var(--color-brand)' : '#9ca3af' }}>
                                 <span className={`transition-transform ${active ? 'scale-110' : ''}`}>{tab.icon}</span>
-                                <span className="text-[9.5px] font-semibold leading-tight">{tab.label}</span>
-                                {active && <div className="w-4 h-0.5 rounded-full" style={{ background: 'var(--color-brand)' }} />}
+                                <span className="text-[9px] font-semibold leading-tight">{tab.label}</span>
+                                {active && <div className="w-3.5 h-0.5 rounded-full" style={{ background: 'var(--color-brand)' }} />}
                             </button>
                         );
                     })}
@@ -344,7 +346,7 @@ export function AppShell({ children, activeTab, onTabChange, onImport, importRef
                         </button>
                         <span className="text-[9px] font-bold mt-0.5" style={{ color: 'var(--color-brand)' }}>Importar</span>
                     </div>
-                    {TABS.slice(2).map(tab => {
+                    {TABS.slice(3).map(tab => {
                         const active = activeTab === tab.id;
                         return (
                             <button key={tab.id} onClick={() => onTabChange(tab.id)}
