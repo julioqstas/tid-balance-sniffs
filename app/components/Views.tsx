@@ -73,7 +73,7 @@ function SortableTh<T>({ label, field, sortKey, dir, onSort, align = 'left' }: {
             style={{ color: active ? '#057b57' : '#6b7280' }}>
             <span className={`inline-flex items-center gap-1 ${align === 'right' ? 'flex-row-reverse' : ''}`}>
                 {label}
-                <Icon size={10} className={active ? 'text-[#057b57]' : 'text-gray-300 group-hover:text-gray-400'} />
+                <Icon size={10} className={active ? 'text-brand' : 'text-gray-300 group-hover:text-gray-400'} />
             </span>
         </th>
     );
@@ -83,7 +83,7 @@ function SortableTh<T>({ label, field, sortKey, dir, onSort, align = 'left' }: {
 function KpiCard({ icon, label, value, sub, iconBg }: { icon: React.ReactNode; label: string; value: string; sub?: string; iconBg: string }) {
     return (
         <div className="bg-white rounded-2xl p-4 flex gap-3 items-start" style={{ boxShadow: 'var(--shadow-card)' }}>
-            <div className={`w-10 h-10 rounded-[10px] flex items-center justify-center shrink-0 ${iconBg}`}>{icon}</div>
+            <div className={`w-10 h-10 rounded-icon flex items-center justify-center shrink-0 ${iconBg}`}>{icon}</div>
             <div className="min-w-0">
                 <p className="text-[10.5px] font-bold uppercase tracking-wider" style={{ color: 'var(--color-timber-grey)' }}>{label}</p>
                 <p className="text-[22px] font-extrabold leading-tight truncate" style={{ color: 'var(--color-timber-dark)' }}>{value}</p>
@@ -158,7 +158,7 @@ export function ConsumoView(props: ViewProps) {
                             <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f1f5f9" />
                             <XAxis dataKey="loteEstandarizado" tick={{ fontSize: 10, fill: '#64748b', fontWeight: 600 }} angle={-90} textAnchor="end" interval={0} height={68} tickMargin={18} />
                             <YAxis tickFormatter={v => new Intl.NumberFormat('en-US').format(v)} tick={{ fontSize: 10, fill: '#64748b', fontWeight: 600 }} />
-                            <Tooltip formatter={(v: number) => fv(v)} contentStyle={customTooltip} cursor={{ fill: '#f8fafc' }} />
+                            <Tooltip formatter={(v: number | undefined) => v !== undefined ? fv(v) : ''} contentStyle={customTooltip} cursor={{ fill: '#f8fafc' }} />
                             <Bar dataKey="consumoTotalM3" name="Consumo (m³)" fill={BRAND} radius={[5, 5, 0, 0]} />
                         </BarChart>
                     </ResponsiveContainer>
@@ -285,7 +285,7 @@ export function RendimientosView(props: ViewProps) {
                             <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f1f5f9" />
                             <XAxis dataKey="loteEstandarizado" tick={{ fontSize: 10, fill: '#64748b', fontWeight: 600 }} angle={-90} textAnchor="end" interval={0} height={68} tickMargin={18} />
                             <YAxis tickFormatter={v => v + '%'} tick={{ fontSize: 10, fill: '#64748b', fontWeight: 600 }} domain={[0, 'auto']} />
-                            <Tooltip formatter={(v: number) => fp(v)} contentStyle={customTooltip} />
+                            <Tooltip formatter={(v: number | undefined) => v !== undefined ? fp(v) : ''} contentStyle={customTooltip} />
                             <Legend verticalAlign="top" height={32} wrapperStyle={{ fontSize: '12px', fontWeight: 600 }} />
                             <Line type="monotone" dataKey="rendimientoGlobal" name="Total %" stroke={AMBER} strokeWidth={3} dot={{ r: 2 }} activeDot={{ r: 5 }} />
                             <Line type="monotone" dataKey="rendimientoLP" name="LP %" stroke={INDIGO} strokeWidth={2.5} dot={{ r: 2 }} activeDot={{ r: 5 }} />

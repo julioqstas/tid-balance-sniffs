@@ -76,7 +76,7 @@ function CompactSelect({ label, opciones, seleccionados, setSeleccionados }: {
                 <div className="fixed inset-0 z-30" onClick={() => setOpen(false)} />
                 <div className="absolute right-0 top-full z-40 mt-1 min-w-[168px] bg-white border border-gray-100 rounded-xl shadow-2xl max-h-56 overflow-y-auto">
                     <div onClick={() => { setSeleccionados([]); setOpen(false); }}
-                        className="p-2.5 border-b border-gray-50 hover:bg-[#e8f5e9] cursor-pointer font-bold text-[11px] flex justify-between items-center"
+                        className="p-2.5 border-b border-gray-50 hover:bg-brand-light cursor-pointer font-bold text-[11px] flex justify-between items-center"
                         style={{ color: '#057b57' }}>
                         <span>Todos</span>{!active && <Check size={12} />}
                     </div>
@@ -243,7 +243,7 @@ export function AppShell({ children, activeTab, onTabChange, onImport, importRef
                             <span key={i} className="flex items-center gap-1 px-2.5 py-1 rounded-full text-[11px] font-bold whitespace-nowrap shrink-0"
                                 style={{ background: '#e8f5e9', color: '#057b57' }}>
                                 {chip.label}
-                                <button onClick={chip.remove} className="ml-0.5 bg-transparent border-none cursor-pointer p-0 text-[#057b57]">
+                                <button onClick={chip.remove} className="ml-0.5 bg-transparent border-none cursor-pointer p-0 text-brand">
                                     <X size={11} />
                                 </button>
                             </span>
