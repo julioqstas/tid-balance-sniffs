@@ -1,26 +1,95 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
+/* ============================================================================
+   TID Balance SNIFFS — Design Tokens
+   Identical system to fq-system / Forestales Quero
+   ============================================================================ */
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  /* Brand Colors — mismo verde TID Quero */
+  --color-brand: #057b57;
+  --color-brand-light: #e8f5e9;
+  --color-brand-dark: #045d42;
+  --color-brand-muted: #d1fae5;
+
+  /* Text */
+  --color-timber-dark: #1d1d1f;
+  --color-timber-grey: #86868b;
+
+  /* Semantic */
+  --color-danger: #d32f2f;
+  --color-danger-light: #ffebee;
+  --color-warning: #f57c00;
+  --color-warning-light: #fff3e0;
+  --color-success: #2e7d32;
+  --color-accent: #007AFF;
+
+  /* Surfaces */
+  --color-surface-app: #f5f5f7;
+  --color-surface-card: #ffffff;
+
+  /* Typography */
+  --font-sans: 'Inter', system-ui, -apple-system, sans-serif;
+
+  /* Border Radius */
+  --radius-card: 18px;
+  --radius-sheet: 20px;
+  --radius-input: 12px;
+  --radius-icon: 10px;
+  --radius-pill: 100px;
+
+  /* Shadows */
+  --shadow-card: 0 1px 4px rgba(0,0,0,0.04), 0 4px 20px rgba(0,0,0,0.03);
+  --shadow-card-hover: 0 8px 30px rgba(0,0,0,0.08);
+  --shadow-fab: 0 4px 15px rgba(5, 123, 87, 0.45);
+  --shadow-header: 0 2px 12px rgba(0,0,0,0.12);
+  --shadow-dock: 0 -2px 20px rgba(0,0,0,0.08);
+  --shadow-sidebar: 2px 0 20px rgba(0,0,0,0.06);
+
+  /* Animations */
+  --animate-fade-in: fade-in 0.25s ease-out;
+  --animate-slide-up: slide-up 0.3s cubic-bezier(0.2,0.8,0.2,1);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+@keyframes fade-in {
+  from { opacity: 0; transform: translateY(4px); }
+  to   { opacity: 1; transform: translateY(0); }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+@keyframes slide-up {
+  from { transform: translateY(100%); }
+  to   { transform: translateY(0); }
 }
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* ============================================================================
+   Base
+   ============================================================================ */
+
+*, *::before, *::after {
+  box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent;
+}
+
+html, body {
+  height: 100dvh;
+  margin: 0;
+  padding: 0;
+  font-family: var(--font-sans);
+  background: var(--color-surface-app);
+  color: var(--color-timber-dark);
+  -webkit-font-smoothing: antialiased;
+  overflow: hidden;
+}
+
+/* ============================================================================
+   Scrollbar
+   ============================================================================ */
+
+::-webkit-scrollbar { width: 5px; height: 5px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: #d1d5db; border-radius: 100px; }
+::-webkit-scrollbar-thumb:hover { background: #9ca3af; }
