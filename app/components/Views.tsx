@@ -647,7 +647,7 @@ export function InicioView({ datos, agrupados, hasData, unitMode, onTabChange, o
             )}
 
             {/* Tarjetas de módulo */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-5 gap-4">
+            <div className="grid grid-cols-2 gap-4">
                 {modules.map(m => (
                     <button
                         key={m.tab}
