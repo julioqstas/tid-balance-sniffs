@@ -13,7 +13,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "TID - Auditor SNIFFS",
+  title: "TID - Auditor SNIFFS Balance CTP",
   description: "Balance de Transformación Primaria — Herramienta de auditoría forestal",
 };
 

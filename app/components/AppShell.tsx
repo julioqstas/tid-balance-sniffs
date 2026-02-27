@@ -157,7 +157,7 @@ export function AppShell({ children, activeTab, onTabChange, onImport, importRef
                     <div className="flex items-center gap-3">
                         <img src="/images/logo-fq.png" alt="FQ Logo" className="w-10 h-10 rounded-full object-contain" style={{ background: 'transparent' }} />
                         <div>
-                            <p className="text-[10px] font-bold uppercase tracking-widest leading-none" style={{ color: 'var(--color-brand)' }}>TID - Auditor SNIFFS</p>
+                            <p className="text-[10px] font-bold uppercase tracking-widest leading-none" style={{ color: 'var(--color-brand)' }}>TID - Auditor SNIFFS Balance CTP</p>
                             <p className="text-[13px] font-bold leading-tight" style={{ color: 'var(--color-timber-dark)' }}>Balance de Transformación Primaria</p>
                         </div>
                     </div>
@@ -200,7 +200,7 @@ export function AppShell({ children, activeTab, onTabChange, onImport, importRef
                     style={{ background: 'var(--color-brand)', boxShadow: 'var(--shadow-header)' }}>
                     <img src="/images/logo-fq.png" alt="FQ" className="w-8 h-8 rounded-full object-contain shrink-0" style={{ background: 'white' }} />
                     <div className="flex-1 min-w-0">
-                        <p className="text-[10px] font-bold opacity-80 uppercase tracking-widest leading-none">TID - Auditor SNIFFS</p>
+                        <p className="text-[10px] font-bold opacity-80 uppercase tracking-widest leading-none">TID - Auditor SNIFFS Balance CTP</p>
                         <p className="text-[14px] font-bold leading-tight truncate">{TITLES[activeTab].title}</p>
                     </div>
                     {/* Unit toggle mobile — solo en Producción/Salidas/Saldos */}
