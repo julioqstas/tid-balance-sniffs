@@ -15,6 +15,7 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   title: "TID - Auditor SNIFFS Balance CTP",
   description: "Balance de Transformación Primaria — Herramienta de auditoría forestal",
+  themeColor: "#057b57",
 };
 
 export default function RootLayout({
