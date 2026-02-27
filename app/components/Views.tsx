@@ -514,18 +514,15 @@ export function InicioView({ datos, agrupados, hasData, unitMode, onTabChange, o
     if (!hasData) {
         return (
             <div className="flex flex-col items-center justify-center h-full text-center px-6 py-12 animate-fade-in">
-                <p className="text-[11px] font-bold uppercase tracking-widest mb-3" style={{ color: 'var(--color-brand)' }}>
-                    TID · Auditor SNIFFS Balance CTP
-                </p>
-                <h1 className="text-[26px] md:text-[32px] font-extrabold leading-tight" style={{ color: 'var(--color-timber-dark)' }}>
-                    ¡Bienvenido al Balance
+                <h1 className="text-[26px] md:text-[34px] font-extrabold leading-tight" style={{ color: 'var(--color-timber-dark)' }}>
+                    ¿Qué balance de
                 </h1>
-                <h1 className="text-[26px] md:text-[32px] font-extrabold leading-tight mb-3" style={{ color: 'var(--color-brand)' }}>
-                    de Transformación Primaria!
+                <h1 className="text-[26px] md:text-[34px] font-extrabold leading-tight" style={{ color: 'var(--color-brand)' }}>
+                    Transformación Primaria
                 </h1>
-                <p className="text-[14px] font-medium max-w-xs mb-10" style={{ color: 'var(--color-timber-grey)' }}>
-                    ¿Qué balance te gustaría analizar hoy?
-                </p>
+                <h1 className="text-[26px] md:text-[34px] font-extrabold leading-tight mb-8" style={{ color: 'var(--color-timber-dark)' }}>
+                    te gustaría analizar hoy?
+                </h1>
 
                 {/* Botón latiente */}
                 <div className="relative flex items-center justify-center mb-6" style={{ width: 80, height: 80 }}>
@@ -621,21 +618,13 @@ export function InicioView({ datos, agrupados, hasData, unitMode, onTabChange, o
     return (
         <div className="p-4 md:p-6 space-y-5 animate-fade-in">
             {/* Header */}
-            <div className="flex flex-col sm:flex-row sm:items-center gap-3">
-                <div className="flex-1">
-                    <h2 className="text-[20px] font-extrabold" style={{ color: 'var(--color-timber-dark)' }}>
-                        Resumen ejecutivo
-                    </h2>
-                    <p className="text-[12px] font-medium" style={{ color: 'var(--color-timber-grey)' }}>
-                        {agrupados.length} lotes · {especiesUnicas} especies analizadas
-                    </p>
-                </div>
-                {periodoLabel && (
-                    <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-full border text-[11px] font-semibold self-start"
-                        style={{ borderColor: 'var(--color-brand)', color: 'var(--color-brand)', background: 'white' }}>
-                        📅 {periodoLabel}
-                    </div>
-                )}
+            <div>
+                <h2 className="text-[20px] font-extrabold" style={{ color: 'var(--color-timber-dark)' }}>
+                    Resumen ejecutivo
+                </h2>
+                <p className="text-[12px] font-medium" style={{ color: 'var(--color-timber-grey)' }}>
+                    {agrupados.length} lotes · {especiesUnicas} especies analizadas
+                </p>
             </div>
 
             {/* Alerta de déficit */}

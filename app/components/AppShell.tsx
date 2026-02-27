@@ -160,14 +160,9 @@ export function AppShell({ children, activeTab, onTabChange, onImport, importRef
                         <img src="/images/logo-fq.png" alt="FQ Logo" className="w-10 h-10 rounded-full object-contain" style={{ background: 'transparent' }} />
                         <div>
                             <p className="text-[10px] font-bold uppercase tracking-widest leading-none" style={{ color: 'var(--color-brand)' }}>TID - Auditor SNIFFS Balance CTP</p>
-                            <p className="text-[13px] font-bold leading-tight" style={{ color: 'var(--color-timber-dark)' }}>Balance de Transformación Primaria</p>
                         </div>
                     </div>
-                    {periodoLabel && (
-                        <div className="mt-2.5 flex items-center justify-center gap-1.5 px-3 py-1 rounded-full border text-[10.5px] font-semibold whitespace-nowrap" style={{ borderColor: 'var(--color-brand)', color: 'var(--color-brand)', background: 'white' }}>
-                            📅 {periodoLabel}
-                        </div>
-                    )}
+
                 </div>
                 <nav className="flex-1 py-3 px-2 overflow-y-auto">
                     <p className="text-[10px] font-bold uppercase tracking-widest px-3 mb-2" style={{ color: 'var(--color-timber-grey)' }}>Secciones</p>
@@ -284,6 +279,13 @@ export function AppShell({ children, activeTab, onTabChange, onImport, importRef
                     {/* Inline filters desktop */}
                     {hasData && (
                         <div className="flex items-center gap-2 shrink-0 flex-wrap justify-end">
+                            {/* Chip período */}
+                            {periodoLabel && (
+                                <div className="flex items-center gap-1 px-2.5 py-1 rounded-full border text-[10.5px] font-semibold whitespace-nowrap shrink-0"
+                                    style={{ borderColor: 'var(--color-brand)', color: 'var(--color-brand)', background: 'white' }}>
+                                    📅 {periodoLabel}
+                                </div>
+                            )}
                             {/* Unit toggle — solo en vistas con PT */}
                             {showUnitToggle && (
                                 <div className="flex items-center rounded-lg border border-gray-200 overflow-hidden text-[11px] font-bold shrink-0">
