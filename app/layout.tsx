@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 
@@ -12,10 +12,13 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
+export const viewport: Viewport = {
+  themeColor: "#057b57",
+};
+
 export const metadata: Metadata = {
   title: "TID - Auditor SNIFFS Balance CTP",
   description: "Balance de Transformación Primaria — Herramienta de auditoría forestal",
-  themeColor: "#057b57",
 };
 
 export default function RootLayout({
